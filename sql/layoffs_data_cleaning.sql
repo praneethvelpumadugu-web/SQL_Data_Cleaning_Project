@@ -94,7 +94,7 @@ ON t1.company=t2.company
 SET t1.industry=t2.industry
 WHERE t1.industry IS NULL AND t2.industry IS NOT NULL;
 
--- Removing unwanted data
+-- Removing unnecessary data
 
 SELECT * FROM layoff_staging2
 WHERE total_laid_off IS NULL AND percentage_laid_off IS NULL;
