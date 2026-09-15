@@ -102,7 +102,7 @@ WHERE total_laid_off IS NULL AND percentage_laid_off IS NULL;
 DELETE FROM layoff_staging2
 WHERE total_laid_off IS NULL AND percentage_laid_off IS NULL;
 
--- AT Last Deleting row_number column
+-- AT Last Deleting (helper column)row_number column
 
 ALTER TABLE layoff_staging2
 DROP COLUMN `row_number`;
