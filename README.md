@@ -2,17 +2,9 @@
 
 ## Overview
 
-This project focuses on cleaning and preparing a raw layoffs dataset
-using MySQL.
+This project focuses on cleaning and preparing a raw layoffs dataset using MySQL.
 
-The dataset contains information about companies, locations, industries,
-layoffs, dates, company stages, countries, and funds raised.
-
-The main goal of this project is to identify and remove duplicate data,
-standardize inconsistent values, handle missing data, convert data types,
-and remove unnecessary records.
-
----
+The main goal was to identify and remove duplicate records, standardize inconsistent values, handle missing data, convert data types, and remove unnecessary records.
 
 ## Tools Used
 
@@ -20,41 +12,72 @@ and remove unnecessary records.
 - MySQL Workbench
 - SQL
 
----
-
 ## Dataset
 
-The raw dataset contains **2,361 records** and the following 9 columns:
+The dataset contains **2,361 records** with information about:
 
-- `company`
-- `location`
-- `industry`
-- `total_laid_off`
-- `percentage_laid_off`
-- `date`
-- `stage`
-- `country`
-- `funds_raised_millions`
+- Companies
+- Locations
+- Industries
+- Layoffs
+- Dates
+- Company stages
+- Countries
+- Funds raised
 
-The original CSV file is included in this repository as:
-
-`layoffs.csv`
-
----
+The original dataset is included as `layoffs.csv`.
 
 ## Data Cleaning Process
 
 ### 1. Created a Staging Table
+Created a copy of the original table so the raw data remained unchanged during cleaning.
 
-A staging table was created as a copy of the original `layoffs` table.
+### 2. Removed Duplicate Records
+Used `ROW_NUMBER()` with `PARTITION BY` to identify duplicate records and removed records where the row number was greater than 1.
 
-The original data was kept unchanged so that the cleaning process could
-be performed safely on the staging data.
+### 3. Standardized Data
+- Removed extra spaces from company names using `TRIM()`.
+- Standardized industry values beginning with `Crypto` to `Crypto`.
+- Removed trailing periods from country names.
 
-```sql
-CREATE TABLE layoff_staging
-LIKE layoffs;
+### 4. Converted Date Data
+Converted the date column from text format to the MySQL `DATE` data type using `STR_TO_DATE()`.
 
-INSERT INTO layoff_staging
-SELECT *
-FROM layoffs;
+### 5. Handled Missing Data
+- Converted empty industry values to `NULL`.
+- Filled missing industry values using another record from the same company when available.
+- Removed records where both `total_laid_off` and `percentage_laid_off` were missing.
+
+### 6. Final Cleanup
+Removed the temporary `row_number` helper column after duplicate removal.
+
+## SQL Concepts Used
+
+- `CREATE TABLE`
+- `INSERT INTO ... SELECT`
+- `ROW_NUMBER()`
+- `PARTITION BY`
+- `UPDATE`
+- `DELETE`
+- `JOIN`
+- `LIKE`
+- `TRIM()`
+- `STR_TO_DATE()`
+- `ALTER TABLE`
+- `NULL` handling
+
+## Project Structure
+
+```text
+SQL_Data_Cleaning_Project/
+│
+├── README.md
+├── data/
+│   └── layoffs.csv
+└── sql/
+    └── layoffs_data_cleaning.sql
+```
+
+## Key Takeaways
+
+This project provided hands-on experience with SQL data cleaning, duplicate detection, data standardization, NULL handling, data type conversion, and working with staging tables in MySQL.
